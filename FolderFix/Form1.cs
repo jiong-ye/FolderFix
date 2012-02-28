@@ -12,9 +12,15 @@ namespace FolderFix
 {
     public partial class Form1 : Form
     {
+        private List<string> folderSets = new List<string>();
+        private string selectedPath = string.Empty;
+
         public Form1()
         {
             InitializeComponent();
+
+            FolderList.Columns.Add("Path", FolderList.Width - 70);
+            FolderList.Columns.Add("Moved", 70);
         }
 
         private void OpenFolderButton_Click(object sender, EventArgs e)
@@ -25,7 +31,8 @@ namespace FolderFix
 
             if (r == DialogResult.OK)
             {
-                string selectedPath = folderBrowserDialog1.SelectedPath;
+                folderSets.Clear();
+                selectedPath = folderBrowserDialog1.SelectedPath;
 
                 if(Directory.Exists(selectedPath))
                 {
@@ -33,8 +40,9 @@ namespace FolderFix
 
                     //read folders in path
                     string[] folders = Directory.GetDirectories(selectedPath);
-                    List<string> folderSets = new List<string>();
                     string ext = "_files";
+                    FolderList.Items.Clear();
+                    List<ListViewItem> itemList = new List<ListViewItem>();
 
                     foreach (string f in folders)
                     {
@@ -50,19 +58,24 @@ namespace FolderFix
                                     folderSets.Add(textFolder);
                                     Log(textFolder + " found. " + folderSets.Count + " found so far.");
 
-                                    string[] textFiles = Directory.GetFiles(textFolder);
-                                    foreach (string filePath in textFiles)
-                                    {
-                                        string fileName = Path.GetFileName(filePath);
-                                        File.Move(textFolder + "\\" + fileName, imgFolder + "\\" + fileName);
-                                        Log("-- moved " + fileName);
-                                    }
+                                    ListViewItem item = new ListViewItem(textFolder);
+                                    item.SubItems.Add("No");
+                                    itemList.Add(item);
 
-                                    Directory.Delete(textFolder);
+                                    //string[] textFiles = Directory.GetFiles(textFolder);
+                                    //foreach (string filePath in textFiles)
+                                    //{
+                                    //    string fileName = Path.GetFileName(filePath);
+                                    //    File.Move(textFolder + "\\" + fileName, imgFolder + "\\" + fileName);
+                                    //    Log("-- moved " + fileName);
+                                    //}
+
+                                    //Directory.Delete(textFolder);
                                 }
                             }
                         }
                     }
+                    FolderList.Items.AddRange(itemList.ToArray());
                 }
                 else
                 {
@@ -70,11 +83,20 @@ namespace FolderFix
                 }
             }
         }
+                
+        private void MoveFilesButton_Click(object sender, EventArgs e)
+        {
+
+        }
 
         private void Log(string m)
         {
             if (m.Length > 0)
+            {
                 ResultBox.Text += m + Environment.NewLine;
+                ResultBox.SelectionStart = ResultBox.Text.Length;
+                ResultBox.ScrollToCaret();
+            }
         }
     }
 }
