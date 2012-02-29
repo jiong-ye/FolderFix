@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
+using System.Drawing;
 
 namespace FolderFix
 {
@@ -45,6 +46,10 @@ namespace FolderFix
                                 item.SubItems.Add(filesToRename > 0 ? "Yes (" + filesToRename + ")" : "No");
                                 itemList.Add(item);
 
+                                //LinkLabel link = new LinkLabel();
+                                //link.Text = "Open";
+                                //link.Click += new EventHandler(link_Click);
+                                //RenameFolderList.AddEmbeddedControl(link, 3, index - 1);
                                 index++;
                             }
                         }
@@ -54,16 +59,21 @@ namespace FolderFix
             }
         }
 
+        void link_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private void RenameFilesButton_Click(object sender, EventArgs e)
         {
             if (renameFolderSet.Count > 0)
             {
                 foreach (string f in renameFolderSet)
                 {
-                    string[] p = {f};
+                    string[] p = { f };
                     BackgroundWorker w = new BackgroundWorker();
                     w.DoWork += DoRenameWork;
-                    w.RunWorkerAsync(p);  
+                    w.RunWorkerAsync(p);
                 }
             }
         }
@@ -107,14 +117,38 @@ namespace FolderFix
                     }
 
                     UpdateRenameFolderStatus(folder, success + " renamed. " + failed + " failed.");
+                    if (failed > 0)
+                        FlagFolderStatus(folder);
+
                 }
                 else
                 {
                     UpdateRenameFolderStatus(folder, "Folder Empty.");
                 }
-                
+
             }
         }
+
+        private void FlagFolderStatus(string folder)
+        {
+            if (!RenameFolderList.InvokeRequired)
+            {
+                var updatedFolder = RenameFolderList.Items.Find(Path.GetFileName(folder), false);
+                if (updatedFolder != null)
+                {
+                    if (updatedFolder.Length > 0)
+                    {
+                        updatedFolder[0].ForeColor = Color.Red;
+                    }
+                }
+            }
+            else
+            {
+                FlagFolderStatusDelegate del = new FlagFolderStatusDelegate(FlagFolderStatus);
+                RenameFolderList.Invoke(del, new object[] { folder });
+            }
+        }
+        delegate void FlagFolderStatusDelegate(string folder);
 
         private void UpdateRenameFolderStatus(string folder, string status)
         {

@@ -29,6 +29,7 @@ namespace FolderFix
             RenameFolderList.Columns.Add("#", 25);
             RenameFolderList.Columns.Add("Path", MoveFolderList.Width - 200);
             RenameFolderList.Columns.Add("Rename Files", 90);
+            RenameFolderList.Columns.Add("", 60);
         }
     }
 }

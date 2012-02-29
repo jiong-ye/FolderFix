@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.MoveFolderList = new System.Windows.Forms.ListView();
+            this.MoveFolderList = new ListViewEx();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.moveTab = new System.Windows.Forms.TabPage();
             this.MoveFilesButton = new System.Windows.Forms.Button();
             this.OpenMoveFilesFolderButton = new System.Windows.Forms.Button();
             this.renameTab = new System.Windows.Forms.TabPage();
-            this.RenameFolderList = new System.Windows.Forms.ListView();
+            this.RenameFolderList = new ListViewEx();
             this.OpenRenameFolderButton = new System.Windows.Forms.Button();
             this.RenameFilesButton = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
@@ -169,7 +169,7 @@
         #endregion
 
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.ListView MoveFolderList;
+        private ListViewEx MoveFolderList;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage moveTab;
         private System.Windows.Forms.TabPage renameTab;
@@ -177,7 +177,7 @@
         private System.Windows.Forms.Button MoveFilesButton;
         private System.Windows.Forms.Button RenameFilesButton;
         private System.Windows.Forms.Button OpenRenameFolderButton;
-        private System.Windows.Forms.ListView RenameFolderList;
+        private ListViewEx RenameFolderList;
     }
 }
 
