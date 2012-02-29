@@ -7,6 +7,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace FolderFix
 {
@@ -44,24 +45,26 @@ namespace FolderFix
                                 item.Name = Path.GetFileName(f);
                                 item.SubItems.Add(Path.GetFileName(f));
                                 item.SubItems.Add(filesToRename > 0 ? "Yes (" + filesToRename + ")" : "No");
-                                itemList.Add(item);
+                                RenameFolderList.Items.Add(item);
 
-                                //LinkLabel link = new LinkLabel();
-                                //link.Text = "Open";
-                                //link.Click += new EventHandler(link_Click);
-                                //RenameFolderList.AddEmbeddedControl(link, 3, index - 1);
+                                LinkLabel link = new LinkLabel();
+                                link.Text = "Open";
+                                link.Click += delegate(object sender2, EventArgs e2) { link_Click(sender2, e2, f); };
+                                RenameFolderList.AddEmbeddedControl(link, 3, index - 1);
                                 index++;
                             }
                         }
                     }
-                    RenameFolderList.Items.AddRange(itemList.ToArray());
                 }
             }
         }
 
-        void link_Click(object sender, EventArgs e)
+        void link_Click(object sender, EventArgs e, string folder)
         {
-            throw new NotImplementedException();
+            if (Directory.Exists(folder))
+            {
+                Process.Start("explorer.exe", @folder);
+            }
         }
 
         private void RenameFilesButton_Click(object sender, EventArgs e)
